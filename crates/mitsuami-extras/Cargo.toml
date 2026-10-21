@@ -1,0 +1,15 @@
+[package]
+name = "mitsuami-extras"
+description = "Widgets for mitsuami that some platforms have no native control for"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+mitsuami.workspace = true
+
+[dev-dependencies]
+mitsuami-test.workspace = true

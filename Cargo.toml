@@ -1,0 +1,15 @@
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "MIT OR Apache-2.0"
+authors = ["David Rios <david.rios.gomes@gmail.com>"]
+repository = "https://github.com/Roboport-Tecnologia/mitsuami-extras"
+
+[workspace.dependencies]
+mitsuami = "1.3.6"
+mitsuami-test = "1.3.6"
