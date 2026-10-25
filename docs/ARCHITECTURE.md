@@ -79,6 +79,8 @@ message has one.
   note that starts with text, and a read-only area.
 - **Where it has run:** headless and AppKit (`tests/text_area.rs`: the hint
   shows and goes, a click on it reaches the area, and it starts where typed
-  text does, from captures; `mitsuami-extras-ffi`'s `tests/ffi.rs`). GTK,
+  text does, from captures; `mitsuami-extras-ffi`'s `tests/ffi.rs`). A click
+  on the hint reaching the text ran by hand in the example on AppKit (the
+  maintainer, 2026-10-25). GTK,
   Kirigami and WinUI only type-check: a native run must confirm GTK's hint
   lines up and passes clicks, and Qt's and XAML's placeholders show.
