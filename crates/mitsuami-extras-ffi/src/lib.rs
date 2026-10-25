@@ -4,10 +4,10 @@
 //! of mitsuami's. Its nodes are mitsuami's, so mitsuami's functions place,
 //! size and destroy them, and hear their events.
 
-use mitsuami::core::View;
+use mitsuami::core::{NodeId, Prop, Ui, View};
 use mitsuami::prelude::*;
 use mitsuami::reactive::{Owner, on_cleanup};
-use mitsuami_extras::TextAreaWithPlaceholder;
+use mitsuami_extras::{FieldWithError, TextAreaWithPlaceholder};
 use mitsuami_ffi::MitsuamiStr;
 use mitsuami_ffi::extend::{guard, keep, string, ui};
 
@@ -90,6 +90,69 @@ pub unsafe extern "C" fn mitsuami_extras_text_area_set_placeholder(id: u32, plac
     guard(|| {
         let placeholder = unsafe { string(placeholder)? };
         text_area(id, |t| t.placeholder.set(placeholder))
+    })
+    .is_some()
+}
+
+/// A node the caller made, in one of extras' views.
+struct Adopt(u32);
+
+impl View for Adopt {
+    fn build(self, _: &Ui) -> NodeId {
+        NodeId::from_raw(self.0)
+    }
+}
+
+/// A field's error, which its message and the field follow.
+struct FieldState {
+    error: Signal<Option<String>>,
+}
+
+thread_local! {
+    static FIELDS: std::cell::RefCell<std::collections::HashMap<u32, FieldState>> =
+        std::cell::RefCell::new(std::collections::HashMap::new());
+}
+
+/// A field with its error message under it (`FieldWithError`): a column
+/// holding `content` (the field, or a row with it and its buttons) and the
+/// message, shown while there's an error. `field` is the text field the
+/// error marks (`Prop::Error`): `content` itself, or a node in it. Returns
+/// the column, which is sized and placed as any node. Set the error with
+/// `mitsuami_extras_field_set_error`. 0 on failure.
+#[unsafe(no_mangle)]
+pub extern "C" fn mitsuami_extras_create_field_with_error(content: u32, field: u32) -> u32 {
+    guard(|| {
+        let ui = ui()?;
+        let owner = Owner::new_root();
+        let (id, error) = owner.with(|| {
+            let error = signal(None::<String>);
+            let marked = ui.clone();
+            mitsuami::reactive::effect(move || {
+                marked.set_prop(NodeId::from_raw(field), Prop::Error(error.get()));
+            });
+            (FieldWithError::new(Adopt(content), error).build(&ui), error)
+        });
+        let raw = id.raw();
+        FIELDS.with(|f| f.borrow_mut().insert(raw, FieldState { error }));
+        owner.with(|| on_cleanup(move || _ = FIELDS.with(|f| f.borrow_mut().remove(&raw))));
+        keep(raw, owner);
+        Ok(raw)
+    })
+    .unwrap_or(0)
+}
+
+/// Sets what's wrong with the field; empty: nothing. `id` is the column
+/// the create function returned.
+///
+/// # Safety
+/// `error` is a string as mitsuami's functions take them.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn mitsuami_extras_field_set_error(id: u32, error: MitsuamiStr) -> bool {
+    guard(|| {
+        let error = unsafe { string(error)? };
+        FIELDS
+            .with(|f| f.borrow().get(&id).map(|f| f.error.set((!error.is_empty()).then_some(error))))
+            .ok_or_else(|| format!("{id} isn't an extras field"))
     })
     .is_some()
 }

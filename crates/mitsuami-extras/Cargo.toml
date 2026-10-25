@@ -17,3 +17,7 @@ mitsuami-test.workspace = true
 [[test]]
 name = "text_area"
 harness = false
+
+[[test]]
+name = "field_with_error"
+harness = false

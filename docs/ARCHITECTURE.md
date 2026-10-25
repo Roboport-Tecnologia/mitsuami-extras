@@ -84,3 +84,32 @@ message has one.
   maintainer, 2026-10-25). GTK,
   Kirigami and WinUI only type-check: a native run must confirm GTK's hint
   lines up and passes clicks, and Qt's and XAML's placeholders show.
+
+### 5.2 FieldWithError
+
+A field with the message of what's wrong with it under it, shown while
+there is one, as SourceGit's popups check their fields as they're typed.
+
+| Platform | Render | Why |
+|---|---|---|
+| GTK | composed: a caption under the field | GNOME marks the entry red (`error` style, from mitsuami's `Prop::Error`) and its apps put the message in a label by it. |
+| AppKit | composed: a caption under the field | `NSTextField` has no error state; macOS forms show the message by the field. |
+| WinUI | composed: a caption under the field | WinUI 3 dropped XAML's input validation; Fluent forms show the message under the field. |
+| Kirigami | composed: a caption under the field | Qt Quick's fields have no error state; KDE forms show the message by the field. |
+
+- **The field is marked by mitsuami,** not here: the app gives it the same
+  error (`TextInput::error`, `Prop::Error`), which sets the platform's
+  error state where it has one, and what assistive technology reads.
+- **The message** is a `Text` in `TextStyle::Caption` and `Color::Error`,
+  under the field, hidden while there's no error. The content can be a
+  row with the field and its buttons: the message goes under the row.
+- **C ABI:** `mitsuami_extras_create_field_with_error(content, field)`
+  holds a node the caller made (the field, or its row) in the column, and
+  marks `field`; `mitsuami_extras_field_set_error` sets the error (empty:
+  none) on both.
+- **Example:** `cargo run -p mitsuami-extras --example field_with_error`:
+  an "Add remote" form checked as it's typed, a URL field in a row with a
+  button, and Add off until both are right.
+- **Where it has run:** AppKit and headless (`tests/field_with_error.rs`);
+  the composition is mitsuami's widgets alone, so it type-checks wherever
+  mitsuami does.
