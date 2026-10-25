@@ -10,5 +10,9 @@ widgets every platform has natively; these are the rest.
 - Each widget is a mitsuami custom widget (mitsuami's `docs/ARCHITECTURE.md`
   §7.3). Follow mitsuami's `CLAUDE.md` for conventions, testing, and
   type-checking the other platforms from macOS.
-- Depends on the published `mitsuami`. If a widget needs something mitsuami
-  lacks, add it there first.
+- Depends on `mitsuami`. If a widget needs something mitsuami lacks, add it
+  there first; until mitsuami publishes it, the workspace builds against the
+  sibling checkout (`../rust-ui-toolkit`), as it does now.
+- `crates/mitsuami-extras-ffi` is the C ABI, in one library with mitsuami's
+  (`docs/ARCHITECTURE.md` §4): `cargo build -p mitsuami-extras-ffi`, and
+  point bindings at `target/debug/libmitsuami_extras_ffi.dylib`.

@@ -13,3 +13,7 @@ mitsuami.workspace = true
 
 [dev-dependencies]
 mitsuami-test.workspace = true
+
+[[test]]
+name = "text_area"
+harness = false

@@ -38,10 +38,44 @@ where platforms differ.
 
 ## 4. C ABI
 
-Each repository exports its own widgets over a C ABI: mitsuami its core and
-built-in widgets, this one its widgets. Language bindings (C# first, in
-`mitsuamia`) build on both.
+`crates/mitsuami-extras-ffi` exports this repository's widgets over a C ABI,
+in one library with mitsuami's (`mitsuami-ffi`, whose functions it exports
+too): two copies of mitsuami in one process would be two cores, so the two
+ABIs can't be separate libraries. Language bindings (C# first, in
+`mitsuamia`) load this library in place of mitsuami's. An extras widget is
+built with mitsuami's builder API in a scope `mitsuami-ffi` disposes with
+the node (`mitsuami_ffi::extend`); its nodes are mitsuami's, so mitsuami's
+functions size, place and destroy them and hear their events. Until
+mitsuami's next release, both build against the sibling checkout
+(`../rust-ui-toolkit`); `mitsuami-ffi` isn't published at all.
 
 ## 5. Widgets
 
-None yet.
+### 5.1 TextAreaWithPlaceholder
+
+A text area with a placeholder on every platform, as SourceGit's commit
+message has one.
+
+| Platform | Render | Why |
+|---|---|---|
+| WinUI | native: `TextBox.PlaceholderText` | XAML's text box has one. |
+| Kirigami | native: `QQC2.TextArea.placeholderText` | Qt's text area has one. |
+| AppKit | composed: a hint over the first line | `NSTextView` has no placeholder in its public API (a private `placeholderString`, not used); AppKit apps draw the hint over the text view. |
+| GTK | composed: a hint over the first line | `GtkTextView` has none; GTK apps lay a label over it in an overlay, with `can-target` off. |
+
+- **The hint** is a `Text` in `Color::Placeholder` at the text area's
+  `text_area_insets`, in a container clicks pass through
+  (`click_through`), hidden while the area has text. It wraps inside the
+  area's width.
+- **The area is the app's** `TextArea`, bound to the signal the widget
+  takes, so the hint follows it; it grows to fill the column the widget
+  is, which the app sizes.
+- **C ABI:** `mitsuami_extras_create_text_area` returns the column and the
+  text area; the value and the placeholder are set through extras'
+  functions (so the hint follows them), the rest on the text area with
+  mitsuami's.
+- **Where it has run:** headless and AppKit (`tests/text_area.rs`: the hint
+  shows and goes, a click on it reaches the area, and it starts where typed
+  text does, from captures; `mitsuami-extras-ffi`'s `tests/ffi.rs`). GTK,
+  Kirigami and WinUI only type-check: a native run must confirm GTK's hint
+  lines up and passes clicks, and Qt's and XAML's placeholders show.
