@@ -74,6 +74,9 @@ message has one.
   text area; the value and the placeholder are set through extras'
   functions (so the hint follows them), the rest on the text area with
   mitsuami's.
+- **Example:** `cargo run -p mitsuami-extras --example text_area`: an empty
+  commit message whose placeholder the app can change and clear back to, a
+  note that starts with text, and a read-only area.
 - **Where it has run:** headless and AppKit (`tests/text_area.rs`: the hint
   shows and goes, a click on it reaches the area, and it starts where typed
   text does, from captures; `mitsuami-extras-ffi`'s `tests/ffi.rs`). GTK,
