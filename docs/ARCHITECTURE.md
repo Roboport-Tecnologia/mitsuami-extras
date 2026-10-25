@@ -47,7 +47,7 @@ built with mitsuami's builder API in a scope `mitsuami-ffi` disposes with
 the node (`mitsuami_ffi::extend`); its nodes are mitsuami's, so mitsuami's
 functions size, place and destroy them and hear their events. Until
 mitsuami's next release, both build against the sibling checkout
-(`../rust-ui-toolkit`); `mitsuami-ffi` isn't published at all.
+(`../mitsuami`); `mitsuami-ffi` isn't published at all.
 
 ## 5. Widgets
 
