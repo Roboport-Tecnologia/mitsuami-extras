@@ -10,12 +10,14 @@ license = "MIT OR Apache-2.0"
 authors = ["David Rios <david.rios.gomes@gmail.com>"]
 repository = "https://github.com/Roboport-Tecnologia/mitsuami-extras"
 
+# Caret versions: extras is a library, and an exact one would hold its users
+# to that one release of mitsuami.
 # mitsuami's C ABI isn't published, so it comes from the same release's tag.
-# The patch keeps that build on the published mitsuami: two copies in one
-# process would be two cores (`docs/ARCHITECTURE.md` §4).
+# The patch keeps that build on the published mitsuami, exactly the tag's:
+# two copies in one process would be two cores (`docs/ARCHITECTURE.md` §4).
 [workspace.dependencies]
-mitsuami = "=2.0.0"
-mitsuami-test = "=2.0.0"
+mitsuami = "2.0.0"
+mitsuami-test = "2.0.0"
 mitsuami-ffi = { git = "https://github.com/Roboport-Tecnologia/mitsuami", tag = "v2.0.0" }
 
 [patch."https://github.com/Roboport-Tecnologia/mitsuami"]
