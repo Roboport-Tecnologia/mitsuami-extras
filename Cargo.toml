@@ -10,11 +10,13 @@ license = "MIT OR Apache-2.0"
 authors = ["David Rios <david.rios.gomes@gmail.com>"]
 repository = "https://github.com/Roboport-Tecnologia/mitsuami-extras"
 
-# The sibling checkout of mitsuami (`../mitsuami`), for what it adds
-# before its next release: the placeholder colour, click-through and the
-# text area's insets. Back to its published version once it's out.
+# mitsuami's C ABI isn't published, so it comes from the same release's tag.
+# The patch keeps that build on the published mitsuami: two copies in one
+# process would be two cores (`docs/ARCHITECTURE.md` §4).
 [workspace.dependencies]
-mitsuami = { path = "../mitsuami/crates/mitsuami", version = "2.0.0" }
-mitsuami-test = { path = "../mitsuami/crates/mitsuami-test", version = "2.0.0" }
-# mitsuami's C ABI isn't published: the sibling checkout's, always.
-mitsuami-ffi = { path = "../mitsuami/crates/mitsuami-ffi" }
+mitsuami = "=2.0.0"
+mitsuami-test = "=2.0.0"
+mitsuami-ffi = { git = "https://github.com/Roboport-Tecnologia/mitsuami", tag = "v2.0.0" }
+
+[patch."https://github.com/Roboport-Tecnologia/mitsuami"]
+mitsuami = "=2.0.0"

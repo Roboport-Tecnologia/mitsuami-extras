@@ -10,9 +10,10 @@ widgets every platform has natively; these are the rest.
 - Each widget is a mitsuami custom widget (mitsuami's `docs/ARCHITECTURE.md`
   §7.3). Follow mitsuami's `CLAUDE.md` for conventions, testing, and
   type-checking the other platforms from macOS.
-- Depends on `mitsuami`. If a widget needs something mitsuami lacks, add it
-  there first; until mitsuami publishes it, the workspace builds against the
-  sibling checkout (`../mitsuami`), as it does now.
+- Depends on the published `mitsuami`, and on `mitsuami-ffi`, which isn't
+  published, from the same release's tag. If a widget needs something
+  mitsuami lacks, add it there first; until mitsuami publishes it, the
+  workspace builds against the sibling checkout (`../mitsuami`).
 - `crates/mitsuami-extras-ffi` is the C ABI, in one library with mitsuami's
   (`docs/ARCHITECTURE.md` §4): `cargo build -p mitsuami-extras-ffi`, and
   point bindings at `target/debug/libmitsuami_extras_ffi.dylib`.

@@ -45,9 +45,10 @@ ABIs can't be separate libraries. Language bindings (C# first, in
 `mitsuamia`) load this library in place of mitsuami's. An extras widget is
 built with mitsuami's builder API in a scope `mitsuami-ffi` disposes with
 the node (`mitsuami_ffi::extend`); its nodes are mitsuami's, so mitsuami's
-functions size, place and destroy them and hear their events. Until
-mitsuami's next release, both build against the sibling checkout
-(`../mitsuami`); `mitsuami-ffi` isn't published at all.
+functions size, place and destroy them and hear their events. `mitsuami`
+is the published crate. `mitsuami-ffi` isn't published, so it comes from the
+same release's tag, with a patch that puts it on the published `mitsuami`
+too: without it, the tag's own `mitsuami` would be a second copy.
 
 ## 5. Widgets
 
