@@ -10,6 +10,6 @@ so it still looks at home.
 
 ```toml
 [dependencies]
-mitsuami = "2.0"
+mitsuami = "2.1"
 mitsuami-extras = "0.1"
 ```
