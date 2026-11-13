@@ -16,9 +16,9 @@ repository = "https://github.com/Roboport-Tecnologia/mitsuami-extras"
 # The patch keeps that build on the published mitsuami, exactly the tag's:
 # two copies in one process would be two cores (`docs/ARCHITECTURE.md` §4).
 [workspace.dependencies]
-mitsuami = "2.2.1"
-mitsuami-test = "2.2.1"
-mitsuami-ffi = { git = "https://github.com/Roboport-Tecnologia/mitsuami", tag = "v2.2.1" }
+mitsuami = "2.3.0"
+mitsuami-test = "2.3.0"
+mitsuami-ffi = { git = "https://github.com/Roboport-Tecnologia/mitsuami", tag = "v2.3.0" }
 
 [patch."https://github.com/Roboport-Tecnologia/mitsuami"]
-mitsuami = "=2.2.1"
+mitsuami = "=2.3.0"
